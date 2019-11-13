@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "552674408188",
+    "firebase_url": "https://anyface-90e92.firebaseio.com",
+    "project_id": "anyface-90e92",
+    "storage_bucket": "anyface-90e92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:552674408188:android:3c86e5b52906d2f3898979",
+        "android_client_info": {
+          "package_name": "tech.levanter.anyvision"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "552674408188-bnilb7vjnp59jk92uldf504ad24jdkah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.levanter.anyvision",
+            "certificate_hash": "eb1ce07c3153c9370d20fb97f92b1d7b6527c08c"
+          }
+        },
+        {
+          "client_id": "552674408188-j1s4o1m0shqd31nr70g4usmn116rte7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKUm2IofbSEI98URqppfircQVpbviTaWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "552674408188-j1s4o1m0shqd31nr70g4usmn116rte7g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

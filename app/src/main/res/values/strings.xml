@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AnyFace</string>
+    <string name="not_faces">Not faces</string>
+    <string name="faces">Faces</string>
+    <string name="all">All</string>
+
+    <string name="illustration_for_empty_gallery">Illustration for empty gallery</string>
+    <string name="empty_gallery">Empty gallery</string>
+    <string name="detect_faces">Detect faces</string>
+    <string name="image">Image</string>
+</resources>
