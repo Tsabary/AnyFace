@@ -3,6 +3,7 @@ package tech.levanter.anyvision.room
 import android.app.Application
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,27 +14,33 @@ class PhotoRepository (application: Application){
 
     private var photoDao: PhotoDao
 
+//    private var allPhotosStatic: MutableList<Photo>
+//    lateinit var allPhotosStatic : List<Photo>
     private var allPhotos: LiveData<MutableList<Photo>>
     private var facesPhotos: LiveData<MutableList<Photo>>
     private var noFacesPhotos: LiveData<MutableList<Photo>>
 
-    private var parentJob = Job()
 
-    private val coroutineContext: CoroutineContext
-        get() = parentJob + Dispatchers.Main
+//    private var parentJob = Job()
+//
+//    private val coroutineContext: CoroutineContext
+//        get() = parentJob + Dispatchers.Main
 
-    private val scope = CoroutineScope(coroutineContext)
+//    private val scope = CoroutineScope(coroutineContext)
 
     init {
 
-        val database: PhotoDatabase = PhotoDatabase.getDatabase(
-            application.applicationContext, scope
-        )
+        val database: PhotoDatabase = PhotoDatabase.getInstance(
+            application.applicationContext
+        )!!
+
         photoDao = database.photoDao()
 
+//        allPhotosStatic = photoDao.getAllPhotosStatic()
         allPhotos = photoDao.getAllPhotos()
         facesPhotos = photoDao.getPhotosWithFaces()
         noFacesPhotos = photoDao.getPhotosWithoutFaces()
+
     }
 
     fun insert(photo: Photo) {
@@ -59,6 +66,12 @@ class PhotoRepository (application: Application){
 //        val deleteAllPhotosAsyncTask = DeleteAllPhotosAsyncTask(
 //            photoDao
 //        ).execute()
+//    }
+
+
+
+//    fun getAllPhotosStatic(): MutableList<Photo> {
+//        return allPhotosStatic
 //    }
 
     fun getAllPhotos(): LiveData<MutableList<Photo>> {
@@ -96,21 +109,21 @@ class PhotoRepository (application: Application){
             }
         }
 
-        private class DeletePhotoAsyncTask(photoDao: PhotoDao) : AsyncTask<Photo, Unit, Unit>() {
-            val mPhotoDao = photoDao
-
-            override fun doInBackground(vararg p0: Photo?) {
-                mPhotoDao.delete(p0[0]!!)
-            }
-        }
-
-        private class DeleteAllPhotosAsyncTask(photoDao: PhotoDao) : AsyncTask<Unit, Unit, Unit>() {
-            val mPhotoDao = photoDao
-
-            override fun doInBackground(vararg p0: Unit?) {
-                mPhotoDao.deleteAllPhotos()
-            }
-        }
+//        private class DeletePhotoAsyncTask(photoDao: PhotoDao) : AsyncTask<Photo, Unit, Unit>() {
+//            val mPhotoDao = photoDao
+//
+//            override fun doInBackground(vararg p0: Photo?) {
+//                mPhotoDao.delete(p0[0]!!)
+//            }
+//        }
+//
+//        private class DeleteAllPhotosAsyncTask(photoDao: PhotoDao) : AsyncTask<Unit, Unit, Unit>() {
+//            val mPhotoDao = photoDao
+//
+//            override fun doInBackground(vararg p0: Unit?) {
+//                mPhotoDao.deleteAllPhotos()
+//            }
+//        }
     }
 
 }

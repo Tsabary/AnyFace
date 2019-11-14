@@ -1,40 +1,33 @@
 package tech.levanter.anyvision.services
 
-import android.content.Context
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Intent
 import android.net.Uri
-import android.os.Environment
+import android.os.AsyncTask
+import android.os.IBinder
 import android.util.Log
-import androidx.core.app.JobIntentService
-import androidx.lifecycle.ViewModelProviders
+import androidx.core.app.NotificationCompat
+import androidx.lifecycle.Observer
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import tech.levanter.anyvision.MainActivity
 import tech.levanter.anyvision.models.Photo
-import tech.levanter.anyvision.room.PhotoDatabase
-import tech.levanter.anyvision.viewModels.AllPhotosViewModel
-import java.io.File
+import tech.levanter.anyvision.room.PhotoRepository
 
-class DetectJobIntentService() : JobIntentService() {
+
+class DetectJobIntentService : Service() {
 
     private val TAG = "DetectJobIntentServi22"
+    lateinit var repo: PhotoRepository
+    lateinit var observer : Observer<MutableList<Photo>>
 
-    fun enqueueWork(context: Context, work : Intent){
-        enqueueWork(context, DetectJobIntentService::class.java, 12, work)
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
     }
 
-    override fun onCreate() {
-        super.onCreate()
-
-        Log.d(TAG, "onCreate")
-    }
-
-    override fun onHandleWork(intent: Intent) {
-        Log.d(TAG, "onHandleWork")
-
-        PhotoDatabase.getDatabase(applicationContext)
-
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val options = FirebaseVisionFaceDetectorOptions.Builder()
             .setClassificationMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
@@ -45,33 +38,48 @@ class DetectJobIntentService() : JobIntentService() {
         val detector = FirebaseVision.getInstance()
             .getVisionFaceDetector(options)
 
-        for (file in allPhotos) {
-            val image = FirebaseVisionImage.fromFilePath(this.context!!, Uri.parse(file.uri))
+        repo = PhotoRepository(application)
 
-            detector.detectInImage(image).addOnSuccessListener {
-                if (it.isNotEmpty()) {
-                    file.hasFaces = 1
-                    allPhotosViewModel.update(file)
-                } else {
-                    file.hasFaces = 2
-                    allPhotosViewModel.update(file)
+        observer = Observer {
+            for (file in it) {
+                val image = FirebaseVisionImage.fromFilePath(application, Uri.parse(file.uri))
+                AsyncTask.execute {
+                    detector.detectInImage(image).addOnSuccessListener { list ->
+                        if (list.isNotEmpty()) {
+                            file.hasFaces = 1
+                            repo.update(file)
+                        } else {
+                            file.hasFaces = 2
+                            repo.update(file)
+                        }
+                    }
                 }
+
+
             }
         }
 
+        repo.getAllPhotos().observeForever(observer)
+
+        val notificationIntent= Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(this,
+            0, notificationIntent, 0)
+
+        val notification = NotificationCompat.Builder(this, getString(tech.levanter.anyvision.R.string.channel_id))
+            .setContentTitle("Detecting faces..")
+            .setContentText("64 photos detected")
+            .setSmallIcon(tech.levanter.anyvision.R.drawable.ic_face)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        startForeground(1, notification)
+
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
-        Log.d(TAG, "onDestroy")
-
+        repo.getAllPhotos().removeObserver(observer)
     }
 
-    override fun onStopCurrentWork(): Boolean {
-
-        Log.d(TAG, "onStopCurrentWork")
-        return super.onStopCurrentWork()
-
-    }
 }

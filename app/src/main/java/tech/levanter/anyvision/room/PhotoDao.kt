@@ -20,6 +20,9 @@ interface PhotoDao {
     fun deleteAllPhotos()
 
     @Query("SELECT * FROM photos_table ORDER BY joyLevel DESC")
+    fun getAllPhotosStatic(): List<Photo>
+
+    @Query("SELECT * FROM photos_table ORDER BY joyLevel DESC")
     fun getAllPhotos(): LiveData<MutableList<Photo>>
 
     @Query("SELECT * FROM photos_table WHERE hasFaces=1")

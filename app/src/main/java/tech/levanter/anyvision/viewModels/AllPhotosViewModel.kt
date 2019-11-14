@@ -11,6 +11,7 @@ class AllPhotosViewModel(application: Application) : AndroidViewModel(applicatio
     private var repository: PhotoRepository =
         PhotoRepository(application)
 
+//    private var allPhotosStatic: MutableList<Photo> = repository.getAllPhotosStatic()
     private var allPhotos: LiveData<MutableList<Photo>> = repository.getAllPhotos()
     private var facePhotos: LiveData<MutableList<Photo>> = repository.getFacesPhotos()
     private var noFacePhotos: LiveData<MutableList<Photo>> = repository.getNoFacesPhotos()
@@ -29,6 +30,10 @@ class AllPhotosViewModel(application: Application) : AndroidViewModel(applicatio
 //
 //    fun deleteAllPhotos() {
 //        repository.deleteAllPhotos()
+//    }
+
+//    fun getAllPhotosStatic(): MutableList<Photo> {
+//        return allPhotosStatic
 //    }
 
     fun getAllPhotos(): LiveData<MutableList<Photo>> {

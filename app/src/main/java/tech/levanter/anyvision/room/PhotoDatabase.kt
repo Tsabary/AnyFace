@@ -26,61 +26,61 @@ abstract class PhotoDatabase : RoomDatabase() {
         private var INSTANCE: PhotoDatabase? = null
 
 
-//        fun getInstance(context: Context, scope: CoroutineScope): PhotoDatabase? {
-//            if (instance == null) {
-//                synchronized(PhotoDatabase::class) {
-//                    instance = Room.databaseBuilder(
-//                        context.applicationContext,
-//                        PhotoDatabase::class.java, "photo_database"
-//                    )
-//                        .fallbackToDestructiveMigration() // when version increments, it migrates (deletes db and creates new) - else it crashes
+        fun getInstance(context: Context): PhotoDatabase? {
+            if (instance == null) {
+                synchronized(PhotoDatabase::class) {
+                    instance = Room.databaseBuilder(
+                        context.applicationContext,
+                        PhotoDatabase::class.java, "photo_database"
+                    )
+                        .fallbackToDestructiveMigration() // when version increments, it migrates (deletes db and creates new) - else it crashes
 //                        .addCallback(RoomCallback())
-//                        .build()
-//                }
-//            }
-//            return instance
-//        }
-
-
-        fun getDatabase(context: Context, scope: CoroutineScope): PhotoDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
+                        .build()
+                }
             }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    PhotoDatabase::class.java,
-                    "photo_database"
-                ).addCallback(RoomCallback(scope)).build()
-                INSTANCE = instance
-                return instance
-            }
+            return instance
         }
+
+
+//        fun getDatabase(context: Context, scope: CoroutineScope): PhotoDatabase {
+//            val tempInstance = INSTANCE
+//            if (tempInstance != null) {
+//                return tempInstance
+//            }
+//            synchronized(this) {
+//                val instance = Room.databaseBuilder(
+//                    context.applicationContext,
+//                    PhotoDatabase::class.java,
+//                    "photo_database"
+//                ).addCallback(RoomCallback(scope)).build()
+//                INSTANCE = instance
+//                return instance
+//            }
+//        }
 
 //        fun destroyInstance() {
 //            instance = null
 //        }
 
 
-        private class RoomCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-
-//            override fun onCreate(db: SupportSQLiteDatabase) {
-//                super.onCreate(db)
-//                PopulateDbAsyncTask(instance)
-//                    .execute()
+//        private class RoomCallback(
+//            private val scope: CoroutineScope
+//        ) : RoomDatabase.Callback() {
+//
+////            override fun onCreate(db: SupportSQLiteDatabase) {
+////                super.onCreate(db)
+////                PopulateDbAsyncTask(instance)
+////                    .execute()
+////            }
+//
+//            override fun onOpen(db: SupportSQLiteDatabase) {
+//                super.onOpen(db)
+//                INSTANCE?.let {
+//                    scope.launch(Dispatchers.IO) {
+//                    }
+//                }
 //            }
-
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                INSTANCE?.let {
-                    scope.launch(Dispatchers.IO) {
-                    }
-                }
-            }
-        }
+//        }
 
 
 //        private val RoomCallback = object : RoomDatabase.Callback() {

@@ -94,7 +94,8 @@ class AllPhotosFragment : Fragment() {
 
     private fun startDetection() {
         val serviceIntent = Intent(this.context, DetectJobIntentService::class.java)
-        DetectJobIntentService().enqueueWork(this.context!!, serviceIntent)
+//        DetectJobIntentService().enqueueWork(this.context!!, serviceIntent)
+        (activity as MainActivity).startService(serviceIntent)
     }
 
 /*
