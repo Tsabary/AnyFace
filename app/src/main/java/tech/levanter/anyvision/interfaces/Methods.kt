@@ -18,10 +18,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
-import com.anychart.AnyChart
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.data.Set
-import com.anychart.enums.*
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.google.firebase.ml.vision.FirebaseVision
@@ -253,9 +249,7 @@ interface Methods {
     fun addExtraLinesToRecycler(adapter:GroupAdapter<ViewHolder>, activity: MainActivity){
         val buffer = 6 - (adapter.itemCount % 3)
         for (i in 0 until buffer) {
-            adapter.add((SinglePhoto(Uri.EMPTY, activity)))
+            adapter.add((SinglePhoto(Uri.EMPTY)))
         }
     }
-
-
 }

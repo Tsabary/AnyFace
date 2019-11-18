@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             app:bt_active="true"
             app:bt_colorActive="@color/lightBlue"
-            app:bt_colorInactive="@color/gray400"
+            app:bt_colorInactive="@color/gray"
             app:bt_icon="@drawable/ic_picture"
             app:bt_iconHeight="16dp"
             app:bt_padding="8dp"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             app:bt_active="false"
             app:bt_colorActive="@color/lightBlue"
-            app:bt_colorInactive="@color/gray400"
+            app:bt_colorInactive="@color/gray"
             app:bt_icon="@drawable/ic_face"
             app:bt_iconHeight="16dp"
             app:bt_padding="8dp"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             app:bt_active="false"
             app:bt_colorActive="@color/lightBlue"
-            app:bt_colorInactive="@color/gray400"
+            app:bt_colorInactive="@color/gray"
             app:bt_icon="@drawable/ic_no_face"
             app:bt_iconHeight="16dp"
             app:bt_padding="8dp"
@@ -70,8 +70,6 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/navigation_searchers"
             tools:layout_editor_absoluteY="13dp" />
-
-        <!-- Add more child items here - max upto 5 -->
 
     </com.gauravk.bubblenavigation.BubbleNavigationConstraintView>
 

@@ -1,27 +1,14 @@
 package tech.levanter.anyvision
 
 import android.Manifest
-import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.navigation_bar_layout.*
 import tech.levanter.anyvision.fragments.AllPhotosFragment
 import tech.levanter.anyvision.fragments.FacesPhotosFragment
 import tech.levanter.anyvision.fragments.NoFacesPhotosFragment
-import android.os.Environment
-import android.util.Log
-import android.view.View
-import androidx.databinding.DataBindingUtil
-import com.daimajia.androidanimations.library.Techniques
-import com.daimajia.androidanimations.library.YoYo
-import kotlinx.android.synthetic.main.navigation_bar_layout.*
-import tech.levanter.anyvision.databinding.ActivityMainBinding
 import tech.levanter.anyvision.interfaces.Methods
-import tech.levanter.anyvision.viewModels.AllPhotosViewModel
-import java.io.File
 
 
 class MainActivity : AppCompatActivity(), Methods {
@@ -68,7 +55,7 @@ class MainActivity : AppCompatActivity(), Methods {
         isAppInForeground = false
     }
 
-    private fun setUpFragments(){
+    private fun setUpFragments() {
         allPhotosFragment = AllPhotosFragment()
         facesPhotosFragment = FacesPhotosFragment()
         noFacesPhotosFragment = NoFacesPhotosFragment()
@@ -96,25 +83,6 @@ class MainActivity : AppCompatActivity(), Methods {
                 1 -> navigateToFragment(this, fm, active!!, facesPhotosFragment)
                 2 -> navigateToFragment(this, fm, active!!, noFacesPhotosFragment)
             }
-        }    }
-
-    /*
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        if (grantResults.isNotEmpty()
-//            && grantResults[0] == PackageManager.PERMISSION_GRANTED && requestCode == 17
-//        ) {
-//            if (isExternalStorageReadable()) {
-//                runOnUiThread {
-//                    loadImages(File(Environment.getExternalStorageDirectory().path + "/download/anyvision"))
-//                }
-//            }
-//        }
-//    }
-*/
+        }
+    }
 }

@@ -66,14 +66,10 @@ dependencies {
 
     implementation 'commons-io:commons-io:2.6'
 
-
     implementation 'android.arch.lifecycle:extensions:2.1.0'
     kapt   'android.arch.lifecycle:common-java8:2.1.0'
 
-//    kapt   'android.arch.lifecycle:compiler:2.1.0'
-
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7' // bubble bottom bar
-
 
     implementation 'com.xwray:groupie:2.1.0' // groupie
     implementation 'com.xwray:groupie-kotlin-android-extensions:2.1.0' // groupie
@@ -87,7 +83,4 @@ dependencies {
 
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
-
-    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
-    implementation 'com.github.shalskar:PeekAndPop:1.1.0'
 }

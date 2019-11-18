@@ -32,8 +32,8 @@ class AllPhotosFragment : Fragment(), Methods {
     lateinit var detectButton : ConstraintLayout
     lateinit var detectButtonText: TextView
 
-    lateinit var allPhotosViewModel: AllPhotosViewModel
-    var isFirstOpen = true
+    private lateinit var allPhotosViewModel: AllPhotosViewModel
+    private var isFirstOpen = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +73,7 @@ class AllPhotosFragment : Fragment(), Methods {
 
                     // Add photos to the recycler
                     for (file in list) {
-                        adapter.add(SinglePhoto(Uri.parse(file.uri), activity))
+                        adapter.add(SinglePhoto(Uri.parse(file.uri)))
                     }
 
                     // Add an extra line of empty items to allow for more scrolling
@@ -81,7 +81,6 @@ class AllPhotosFragment : Fragment(), Methods {
 
                     //start recycler animation
                     adapter.notifyDataSetChanged()
-//                recycler.scheduleLayoutAnimation()
 
                     if (isFirstOpen && list.isNotEmpty()) {
                         recycler.scheduleLayoutAnimation()

@@ -1,24 +1,15 @@
 package tech.levanter.anyvision.adapters
 
 import android.net.Uri
-import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.single_photo.view.*
-import tech.levanter.anyvision.MainActivity
 import tech.levanter.anyvision.R
-import java.io.File
-import com.peekandpop.shalskar.peekandpop.PeekAndPop
-
-
-
-
 
 
 class SinglePhoto(
-    private val imageUri: Uri,
-    private val activity: MainActivity
+    private val imageUri: Uri
 ) : Item<ViewHolder>() {
 
     override fun getLayout(): Int = R.layout.single_photo
@@ -26,12 +17,5 @@ class SinglePhoto(
     override fun bind(viewHolder: ViewHolder, position: Int) {
         val image = viewHolder.itemView.single_photo_photo
         Glide.with(viewHolder.root.context).load(imageUri).into(image)
-
-        val peekAndPop = PeekAndPop.Builder(activity)
-            .peekLayout(tech.levanter.anyvision.R.layout.peek_view)
-            .build()
-
-        val peekView = peekAndPop.peekView
-
     }
 }

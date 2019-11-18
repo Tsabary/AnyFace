@@ -40,7 +40,7 @@ class FacesPhotosFragment : Fragment() {
         val activity = activity as MainActivity
 
         val recycler = gallery_recycler
-        adapter = GroupAdapter<ViewHolder>()
+        adapter = GroupAdapter()
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this.context, 3)
 
@@ -60,7 +60,7 @@ class FacesPhotosFragment : Fragment() {
                         View.VISIBLE else emptyGalleryNotice.visibility = View.GONE
 
                     for (image in list.sortedByDescending { photo -> photo.joyLevel }) {
-                        adapter.add(SinglePhoto(Uri.parse(image.uri), activity))
+                        adapter.add(SinglePhoto(Uri.parse(image.uri)))
                     }
 
                     adapter.notifyDataSetChanged()

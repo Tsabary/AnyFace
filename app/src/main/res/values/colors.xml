@@ -1,40 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-
-
-    <color name="mainColor50">#FFFBDE</color>
-    <color name="mainColor100">#FFF5B0</color>
-    <color name="mainColor200">#FEEF7F</color>
-    <color name="mainColor300">#FEE94C</color>
-    <color name="mainColor400">#FEE526</color>
-    <color name="mainColor500">#FEE000</color>
-    <color name="mainColor600">#E7CC00</color>
-    <color name="mainColor700">#CEB600</color>
-    <color name="mainColor800">#B49F00</color>
-    <color name="mainColor900">#847500</color>
-
-
-    <color name="gray100">#F5F5F5</color>
-    <color name="gray300">#E0E0E0</color>
-    <color name="gray400">#BDBDBD</color>
-    <color name="gray500">#9E9E9E</color>
-    <color name="gray700">#616161</color>
-    <color name="gray800">#424242</color>
-    <color name="gray900">#212121</color>
-
-    <color name="black">#000000</color>
-    <color name="white">#ffffff</color>
-    <color name="transparent">#00FFFFFF</color>
-
-    <color name="forGradient">#FEE000</color>
-    <color name="forGradient2">#B49F00</color>
-
-    <color name="iconsColor">#212121</color>
-    <color name="iconFill">#FFFFFF</color>
-
     <color name="darkBlue">#0D2B50</color>
     <color name="lightBlue">#00BCD4</color>
+    <color name="gray">#BDBDBD</color>
+    <color name="white">#ffffff</color>
 </resources>

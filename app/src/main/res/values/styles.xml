@@ -5,7 +5,7 @@
 
         <item name="colorPrimary">@color/darkBlue</item>
         <item name="colorPrimaryDark">@color/darkBlue</item>
-        <item name="colorAccent">@color/mainColor600</item>
+        <item name="colorAccent">@color/darkBlue</item>
     </style>
 
 </resources>
