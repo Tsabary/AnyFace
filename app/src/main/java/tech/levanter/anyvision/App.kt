@@ -9,7 +9,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         createNotificationChannel()
     }
 
@@ -18,7 +17,7 @@ class App : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 getString(R.string.channel_id),
-                "Face Detetioc channel",
+                "Face Detection channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
 

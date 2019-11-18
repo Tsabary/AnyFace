@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,8 +22,12 @@ import tech.levanter.anyvision.viewModels.AllPhotosViewModel
 
 class NoFacesPhotosFragment : Fragment() {
 
-    var isFirstOpen = true
+    lateinit var adapter : GroupAdapter<ViewHolder>
     lateinit var emptyIllustration : ImageView
+    lateinit var detectButton: ConstraintLayout
+    lateinit var detectButtonText : TextView
+
+    private var isFirstOpen = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +40,16 @@ class NoFacesPhotosFragment : Fragment() {
         val activity = activity as MainActivity
 
         val recycler = gallery_recycler
-        val adapter = GroupAdapter<ViewHolder>()
+        adapter = GroupAdapter<ViewHolder>()
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this.context, 3)
 
         val emptyGalleryNotice = gallery_no_photos_container
         emptyIllustration = gallery_no_photos_illustration
+        detectButton = gallery_detect_button
+        detectButton.visibility = View.GONE
+        detectButtonText = gallery_detect_button_text
 
-        gallery_detect_button.visibility = View.GONE
 
         activity.let {
             ViewModelProviders.of(it).get(AllPhotosViewModel::class.java).getNoFacePhotos().observe(
@@ -52,7 +60,7 @@ class NoFacesPhotosFragment : Fragment() {
                         View.VISIBLE else emptyGalleryNotice.visibility = View.GONE
 
                     for (image in list) {
-                        adapter.add(SinglePhoto(Uri.parse(image.uri)))
+                        adapter.add(SinglePhoto(Uri.parse(image.uri), activity))
                     }
 
                     adapter.notifyDataSetChanged()

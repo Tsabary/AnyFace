@@ -1,33 +1,39 @@
 package tech.levanter.anyvision.fragments
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.galleries_layout.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import tech.levanter.anyvision.MainActivity
 import tech.levanter.anyvision.R
 import tech.levanter.anyvision.adapters.SinglePhoto
-import tech.levanter.anyvision.viewModels.AllPhotosViewModel
+import tech.levanter.anyvision.interfaces.Methods
 import tech.levanter.anyvision.models.Photo
-import tech.levanter.anyvision.services.DetectJobIntentService
+import tech.levanter.anyvision.viewModels.AllPhotosViewModel
 
 
-class AllPhotosFragment : Fragment() {
-    private var allPhotos = mutableListOf<Photo>()
+class AllPhotosFragment : Fragment(), Methods {
+    private var allPhotos = listOf<Photo>()
     lateinit var emptyIllustration: ImageView
+    lateinit var detectButton : ConstraintLayout
+    lateinit var detectButtonText: TextView
+
+    lateinit var allPhotosViewModel: AllPhotosViewModel
+    var isFirstOpen = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,15 +54,17 @@ class AllPhotosFragment : Fragment() {
         val emptyGalleryNotice = gallery_no_photos_container
         emptyIllustration = gallery_no_photos_illustration
 
-        val detectButton = gallery_detect_button
+        detectButton = gallery_detect_button
         detectButton.visibility = View.VISIBLE
-
+        detectButtonText = gallery_detect_button_text
+        detectButtonText.text = activity.getString(R.string.detect_faces)
 
         activity.let {
-            ViewModelProviders.of(this).get(AllPhotosViewModel::class.java).getAllPhotos()
+            allPhotosViewModel = ViewModelProviders.of(this).get(AllPhotosViewModel::class.java)
+
+            allPhotosViewModel.getAllPhotos()
                 .observe(it, Observer { list ->
                     adapter.clear()
-                    allPhotos.clear()
                     allPhotos = list
 
                     // Show or hide the 'empty 'gallery' illustration and message
@@ -65,75 +73,29 @@ class AllPhotosFragment : Fragment() {
 
                     // Add photos to the recycler
                     for (file in list) {
-                        adapter.add(SinglePhoto(Uri.parse(file.uri)))
+                        adapter.add(SinglePhoto(Uri.parse(file.uri), activity))
                     }
 
                     // Add an extra line of empty items to allow for more scrolling
-                    val buffer = 6 - (adapter.itemCount % 3)
-                    for (i in 0 until buffer) {
-                        adapter.add((SinglePhoto(Uri.EMPTY)))
-                    }
+                    addExtraLinesToRecycler(adapter, activity)
 
                     //start recycler animation
                     adapter.notifyDataSetChanged()
 //                recycler.scheduleLayoutAnimation()
 
-//                if(isFirstOpen && adapter.itemCount >buffer+5){
-//                    recycler.scheduleLayoutAnimation()
-//                    isFirstOpen = false
-//                }
+                    if (isFirstOpen && list.isNotEmpty()) {
+                        recycler.scheduleLayoutAnimation()
+                        isFirstOpen = false
+                    }
                 })
         }
 
         detectButton.setOnClickListener {
-
-            startDetection()
-        }
-    }
-
-
-    private fun startDetection() {
-        val serviceIntent = Intent(this.context, DetectJobIntentService::class.java)
-//        DetectJobIntentService().enqueueWork(this.context!!, serviceIntent)
-        (activity as MainActivity).startService(serviceIntent)
-    }
-
-/*
-    fun detectFaces() {
-        val options = FirebaseVisionFaceDetectorOptions.Builder()
-            .setClassificationMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
-            .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
-            .setMinFaceSize(0.15f)
-            .build()
-
-        val detector = FirebaseVision.getInstance()
-            .getVisionFaceDetector(options)
-
-        for (file in allPhotos) {
-            val image = FirebaseVisionImage.fromFilePath(this.context!!, Uri.parse(file.uri))
-
-            detector.detectInImage(image).addOnSuccessListener {
-                //                    if (it.isNotEmpty()) imagesWithFaces.add(file) else imagesWithNoFaces.add(file)
-
-                if (it.isNotEmpty()) {
-                    file.hasFaces = 1
-                    allPhotosViewModel.update(file)
-                } else {
-                    file.hasFaces = 2
-                    allPhotosViewModel.update(file)
-                }
-
-
-                /*
-                adapter.remove(SinglePhoto(file)) should remove items as they get sorted but currently crashes, need to see why
-                adapter.notifyDataSetChanged()
-                 */
-//                    if (allPhotos.size == imagesWithFaces.size + imagesWithNoFaces.size + failedDetectionOperations) postLists()
-            }.addOnFailureListener {
-                failedDetectionOperations++
+            activity.isDetecting = true
+            changeButtonText(activity, detectButtonText)
+            CoroutineScope(IO).launch {
+                detectFaces(activity, allPhotosViewModel, allPhotos)
             }
         }
-
     }
-*/
 }

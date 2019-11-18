@@ -8,26 +8,17 @@ import tech.levanter.anyvision.models.Photo
 interface PhotoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(photo: Photo)
+    suspend fun insert(photo: Photo)
 
     @Update
-    fun update(photo: Photo)
-
-    @Delete
-    fun delete(photo: Photo)
-
-    @Query("DELETE FROM photos_table")
-    fun deleteAllPhotos()
+    suspend fun update(photo: Photo)
 
     @Query("SELECT * FROM photos_table ORDER BY joyLevel DESC")
-    fun getAllPhotosStatic(): List<Photo>
-
-    @Query("SELECT * FROM photos_table ORDER BY joyLevel DESC")
-    fun getAllPhotos(): LiveData<MutableList<Photo>>
+     fun getAllPhotos(): LiveData<List<Photo>>
 
     @Query("SELECT * FROM photos_table WHERE hasFaces=1")
-    fun getPhotosWithFaces(): LiveData<MutableList<Photo>>
+     fun getPhotosWithFaces(): LiveData<List<Photo>>
 
     @Query("SELECT * FROM photos_table WHERE hasFaces=2")
-    fun getPhotosWithoutFaces(): LiveData<MutableList<Photo>>
+     fun getPhotosWithoutFaces(): LiveData<List<Photo>>
 }

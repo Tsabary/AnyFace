@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,8 +22,12 @@ import tech.levanter.anyvision.viewModels.AllPhotosViewModel
 
 class FacesPhotosFragment : Fragment() {
 
-    var isFirstOpen = true
-    lateinit var emptyIllustration : ImageView
+    lateinit var adapter : GroupAdapter<ViewHolder>
+    lateinit var emptyIllustration: ImageView
+    lateinit var detectButton: ConstraintLayout
+    lateinit var detectButtonText : TextView
+
+    private var isFirstOpen = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,14 +40,15 @@ class FacesPhotosFragment : Fragment() {
         val activity = activity as MainActivity
 
         val recycler = gallery_recycler
-        val adapter = GroupAdapter<ViewHolder>()
+        adapter = GroupAdapter<ViewHolder>()
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this.context, 3)
 
         val emptyGalleryNotice = gallery_no_photos_container
         emptyIllustration = gallery_no_photos_illustration
-
-        gallery_detect_button.visibility = View.GONE
+        detectButton = gallery_detect_button
+        detectButton.visibility = View.GONE
+        detectButtonText = gallery_detect_button_text
 
         activity.let {
             ViewModelProviders.of(it).get(AllPhotosViewModel::class.java).getFacePhotos().observe(
@@ -52,8 +59,8 @@ class FacesPhotosFragment : Fragment() {
                     if (list.isEmpty()) emptyGalleryNotice.visibility =
                         View.VISIBLE else emptyGalleryNotice.visibility = View.GONE
 
-                    for (image in list) {
-                        adapter.add(SinglePhoto(Uri.parse(image.uri)))
+                    for (image in list.sortedByDescending { photo -> photo.joyLevel }) {
+                        adapter.add(SinglePhoto(Uri.parse(image.uri), activity))
                     }
 
                     adapter.notifyDataSetChanged()

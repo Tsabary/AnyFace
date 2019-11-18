@@ -33,7 +33,7 @@ class DetectJobIntentServiceOld : JobIntentService() {
     private val TAG = "DetectJobIntentServi22"
     lateinit var repo: PhotoRepository
 
-    lateinit var observer : Observer<MutableList<Photo>>
+    lateinit var observer : Observer<List<Photo>>
 
     fun enqueueWork(context: Context, work: Intent) {
         enqueueWork(context, DetectJobIntentServiceOld::class.java, 12, work)

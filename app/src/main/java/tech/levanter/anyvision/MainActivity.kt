@@ -17,6 +17,7 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import kotlinx.android.synthetic.main.navigation_bar_layout.*
 import tech.levanter.anyvision.databinding.ActivityMainBinding
 import tech.levanter.anyvision.interfaces.Methods
 import tech.levanter.anyvision.viewModels.AllPhotosViewModel
@@ -25,15 +26,16 @@ import java.io.File
 
 class MainActivity : AppCompatActivity(), Methods {
 
-
     private val fm = supportFragmentManager
-    private var active: Fragment? = null
-
-    lateinit var allPhotosViewModel: AllPhotosViewModel
+    var active: Fragment? = null
 
     lateinit var allPhotosFragment: AllPhotosFragment
     lateinit var facesPhotosFragment: FacesPhotosFragment
     lateinit var noFacesPhotosFragment: NoFacesPhotosFragment
+
+    var isAppInForeground = false
+    var isDetecting = false
+    var operationResultText = ""
 
 
     private val permissions = arrayOf(
@@ -45,6 +47,28 @@ class MainActivity : AppCompatActivity(), Methods {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setUpFragments()
+        setUpBottomNav()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        isAppInForeground = true
+
+        if (hasNoPermissions(this)) {
+            requestPermission(this, permissions)
+        } else {
+            loadAllPhotos(this)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isAppInForeground = false
+    }
+
+    private fun setUpFragments(){
         allPhotosFragment = AllPhotosFragment()
         facesPhotosFragment = FacesPhotosFragment()
         noFacesPhotosFragment = NoFacesPhotosFragment()
@@ -62,37 +86,19 @@ class MainActivity : AppCompatActivity(), Methods {
             .commitAllowingStateLoss()
 
         active = allPhotosFragment
+    }
 
-        allPhotosViewModel = ViewModelProviders.of(this).get(AllPhotosViewModel::class.java)
-
-        val bottomNavigation = home_bottom_nav
+    private fun setUpBottomNav() {
+        val bottomNavigation = bottom_nav
         bottomNavigation.setNavigationChangeListener { _, position ->
             when (position) {
-                0 -> navigateToAll()
-                1 -> navigateToFaces()
-                2 -> navigateToNoFaces()
+                0 -> navigateToFragment(this, fm, active!!, allPhotosFragment)
+                1 -> navigateToFragment(this, fm, active!!, facesPhotosFragment)
+                2 -> navigateToFragment(this, fm, active!!, noFacesPhotosFragment)
             }
-        }
-    }
+        }    }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (hasNoPermissions(this)) {
-            requestPermission(this, permissions)
-        } else {
-            loadAllPhotos(this)
-        }
-//        else {
-//
-////            if (isExternalStorageReadable()) {
-////                runOnUiThread {
-////                    loadImages(File(Environment.getExternalStorageDirectory().path + "/download/anyvision"))
-////                }
-////            }
-//        }
-    }
-
+    /*
 //    override fun onRequestPermissionsResult(
 //        requestCode: Int,
 //        permissions: Array<out String>,
@@ -110,53 +116,5 @@ class MainActivity : AppCompatActivity(), Methods {
 //            }
 //        }
 //    }
-
-//    private fun loadImages(dir: File?) {
-//        if (dir != null) {
-//            if (dir.exists()) {
-//
-//                val files = dir.listFiles()
-//                if (files != null) {
-//                    val allPhotos = mutableListOf<File>()
-//
-//                    for (file in files) {
-//                        val absolutePath = file.absolutePath
-//
-//                        if (absolutePath.contains(".")) {
-//                            val extension = absolutePath.substring(absolutePath.lastIndexOf("."))
-//                            if (acceptedExtensions.contains(extension)) {
-//                                allPhotos.add(file)
-//                            }
-//                        }
-//                    }
-//                    allPhotosViewModel.photosList.postValue(allPhotos)
-//                }
-//            }
-//        }
-//    }
-
-
-    private fun navigateToAll() {
-        fm.beginTransaction().hide(active!!).show(allPhotosFragment).commit()
-        active = allPhotosFragment
-        shake(allPhotosFragment.emptyIllustration)
-    }
-
-    private fun navigateToFaces() {
-        fm.beginTransaction().hide(active!!).show(facesPhotosFragment).commit()
-        active = facesPhotosFragment
-        shake(facesPhotosFragment.emptyIllustration)
-    }
-
-    private fun navigateToNoFaces() {
-        fm.beginTransaction().hide(active!!).show(noFacesPhotosFragment).commit()
-        active = noFacesPhotosFragment
-        shake(noFacesPhotosFragment.emptyIllustration)
-    }
-
-    private fun shake(view: View) {
-        YoYo.with(Techniques.Shake)
-            .duration(700)
-            .playOn(view)
-    }
+*/
 }

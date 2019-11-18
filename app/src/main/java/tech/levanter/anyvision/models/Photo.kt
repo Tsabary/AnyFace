@@ -10,7 +10,4 @@ data class Photo(
     @PrimaryKey@ColumnInfo(name = "uri") var uri: String,
     @ColumnInfo(name = "joyLevel") var joyLevel: Float,
     @ColumnInfo(name = "hasFaces") var hasFaces: Int
-) {
-//    @PrimaryKey(autoGenerate = true)
-//    var id: Int = 0
-}
+)
